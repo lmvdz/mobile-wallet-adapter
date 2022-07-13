@@ -17,6 +17,7 @@ import {
     WalletSendTransactionError,
     WalletSignMessageError,
     WalletSignTransactionError,
+    scopePollingDetectionStrategy
 } from '@solana/wallet-adapter-base';
 import { Connection, PublicKey, SendOptions, Transaction, TransactionSignature } from '@solana/web3.js';
 import getIsSupported from './getIsSupported';
@@ -69,7 +70,7 @@ export class SolanaMobileWalletAdapter extends BaseMessageSignerWalletAdapter {
                     // we can use to test for whether the association URI is supported.
                     this.emit('readyStateChange', (this._readyState = WalletReadyState.Installed));
                 }
-            });
+            })
         }
     }
 
@@ -93,6 +94,7 @@ export class SolanaMobileWalletAdapter extends BaseMessageSignerWalletAdapter {
     }
 
     async connect(): Promise<void> {
+        if (this.connecting || this.connected) return;
         if (this._readyState !== WalletReadyState.Installed && this._readyState !== WalletReadyState.Loadable) {
             const err = new WalletNotReadyError();
             this.emit('error', err);

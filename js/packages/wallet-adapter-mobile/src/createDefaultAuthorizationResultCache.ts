@@ -17,7 +17,7 @@ export default function createDefaultAuthorizationResultCache(): AuthorizationRe
             try {
                 storage.removeItem(CACHE_KEY);
                 // eslint-disable-next-line no-empty
-            } catch {}
+            } catch (error) { console.error(error) }
         },
         async get() {
             if (!storage) {
@@ -26,7 +26,7 @@ export default function createDefaultAuthorizationResultCache(): AuthorizationRe
             try {
                 return (JSON.parse(storage.getItem(CACHE_KEY) as string) as AuthorizationResult) || undefined;
                 // eslint-disable-next-line no-empty
-            } catch {}
+            } catch (error) { console.error(error) }
         },
         async set(authorizationResult: AuthorizationResult) {
             if (!storage) {
@@ -35,7 +35,7 @@ export default function createDefaultAuthorizationResultCache(): AuthorizationRe
             try {
                 storage.setItem(CACHE_KEY, JSON.stringify(authorizationResult));
                 // eslint-disable-next-line no-empty
-            } catch {}
+            } catch (error) { console.error(error) }
         },
     };
 }
